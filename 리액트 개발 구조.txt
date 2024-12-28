@@ -1,0 +1,103 @@
+파일의 전반적인 구조는 이러하며
+
+my-app/
+├── node_modules/          # 설치된 패키지들
+├── public/                # 정적 파일 (index.html, favicon 등)
+│   ├── index.html         # HTML 템플릿
+│   ├── favicon.ico        # 사이트 아이콘
+│   └── ...
+├── src/                   # 소스 코드
+│   ├── App.js             # 기본 App 컴포넌트
+│   ├── App.css            # App 컴포넌트 관련 CSS
+│   ├── index.js           # 리액트 애플리케이션의 엔트리 포인트
+│   ├── index.css          # 전역 CSS
+│   ├── reportWebVitals.js # 웹 vitals 성능 측정을 위한 파일
+│   └── setupTests.js      # 테스트 셋업 (테스트 라이브러리 설정)
+├── .gitignore             # git에서 제외할 파일 설정
+├── package.json           # 프로젝트 의존성 및 설정
+├── README.md              # 프로젝트 설명
+└── yarn.lock / package-lock.json  # 의존성 관리 파일
+
+
+root - index.html이고 index.html을 들어가면 <body>부분에 <div id="root"></></>라고 되어있는데 이 부분이 root부분으로
+index.js와 연결되어 있는 역할을 하며
+원래라면 <link> 태그와 같이 연결을 해줘야 하지만 리액트는 이를 패키지 생성할때 자동으로 해주기 때문에 알아서 설정이 되어있게 된다.
+
+그러면 저 div영역인 root는 index.js안에 들어가게 되며 여기서 const root = ReactDOM.createRoot(document.getElementById('root'));
+이런식으로 저절로 index.html에 root가 index.js의 root가 설정되어있는걸 알 수 있으며
+초기설정 코드를 보면 import App from './App';
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+이런식으로 index.js또한 진입점이고 그 진입점의 대상체는 ./App 즉, App.js라는것을 확인할 수 있게 된다.
+
+
+그래서 구조를 쉽게 보자면 index.html -> index.js -> App.js 형태가 root형태인것이고
+App.js와 같은 형태의 파일을 컴포넌트라 불리우게 되며
+App.js라는 root컴포넌트를 필두로 자식 컴포넌트들을 생성하여 계층형 구조를 가질 수 있게 된다.
+추가로 App.js를 들어가면 function App(){}으로 되어있으며 이는 리액트가 함수형 컴포넌트라는것을 알 수 있게 된다.
+
+index.html <-> index.js <-> App.js 의 형태로 초기설정이 시작되는데
+실질적으로 App.js안에서 자식컴포넌트도 만들고 실제 개발을 여기서 많이 하기 때문에 index.js는 뭐하는건지 감이 안올 수 있지만
+단순히 2개의 html <-> App.js를 연결해주는 인터페이스의 개념을 하는 역할도 있지만
+추가로 애플리케이션 초기화와 설정과 같은 부분을 담당하는 진입점의 역할을 한다.
+
+자식 컴포넌트 생성에 대한 부분
+리액트는 function기반의 컴포넌트이기에 
+자식컴포넌트를 호출하고 랜더링하는 일련의 과정도 func기반이다.
+모든 컴포넌트들은 1개의 함수만을 가질 수 있고
+
+부모에서 자식컴포넌트를 랜더링하려면 자식컴포넌트의 함수를 정의하고 가져옴으로써 랜더링할 수 있게 되는것이다.
+
+App.js기준으로 본다면
+import Child from './Child'; 자식컴포넌트 파일을 가져온다. Child.js
+
+function App() {
+  return (
+    <div>
+      <h1>부모 컴포넌트입니다!</h1>
+      <Child />
+    </div>
+  );
+}
+
+저기 <Child/>태그가 일련의 함수호출이 되는것이다.
+
+Child.js를 보면
+import React from 'react';
+
+function Child() {
+  return <h2>안녕하세요, 저는 자식 컴포넌트입니다!</h2>;
+}
+
+export default Child;
+
+이렇게 되어있을거고 이를 합치면 
+
+    <div>
+      <h1>부모 컴포넌트입니다!</h1>
+      <h2>안녕하세요, 저는 자식 컴포넌트입니다!</h2>
+    </div>
+
+이런식으로 랜더링이 될것이다.
+
+
+그리고 리액트는 jsx(java script xml)표현식이기에 표현식을 사용할때는 {}스코프 블럭을 사용해야 한다.
+
+const name = "리액트";
+
+return ( <h1>{name} 안녕하세요!</h1>); 와 같이
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+1. npx create-react-app my-app 명령어를 사용하면 리액트가 설치된다. 다만 리액트 릴리즈19로 인해서 
+@testing-library//react는 버전 18에 호환하고 리액트는 자동적으로 최신 19버전을 설치하여서
+이 2개가 자동으로 깔리지만 서로 호환이 맞지 않아 충돌한다.
+이는 릴리즈 19 정식 버전이 생성되어서 그런거니
+Yarn을 이용해야 한다.
+
+2. npm install -g yarn  Yarn을 설치하고
+3. yarn create react-app my-app  my-app폴더에 리엑트를 Yarn을 활용해 설치하면 된다.
+Yarn은 페북에서 개발한 js패키지 관리 도구로 npm과 유사한 기능을 한다.
+npm은 node.js에 포함된 패키지 관리도구이며 Yarn은 단점을 보완하기 위해 개발되었다.
+npm은 버전 관리와 같은 의존성 충돌을 수동으로 해야하지만
+Yarn은 자동적으로 이를 처리해주기 때문에 간편하다
+
+그러면 우리의 문제점인 리엑트와 testing같에 버전 해결을 Yarn은 어떻게 해주었을까?
+yarn.lock 혹은 package.json을 보면 알 수 있는데
+package.json에서 보면 testing이 설치가 안되어있는걸로 보아
+testing을 없애는 방식으로 설치를 진행한듯 하다 이러한 방식으로 버전 충돌을 피한거 같다.
+
+
