@@ -35,7 +35,11 @@ typedef struct ListValue {
 
 
 void json_parse_main() {
-	
+	struct Object* root;
+
+	root = (struct Object*)malloc(sizeof(struct Object*) * 1024);
+
+	root->key;
 
 	
 }
