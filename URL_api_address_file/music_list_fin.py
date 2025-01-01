@@ -3,7 +3,7 @@ import os
 import isodate  # ISO 8601 시간 형식을 변환하기 위한 라이브러리
 
 # API 키 설정
-api_key = 'AIzaSyB3LtNBx8RyUNEPa0HLjKWlBxG-HqP1A04'  # 여기에 생성한 API 키 입력
+api_key = ''  # 여기에 생성한 API 키 입력
 
 # YouTube API 클라이언트 초기화
 youtube = build('youtube', 'v3', developerKey=api_key)
