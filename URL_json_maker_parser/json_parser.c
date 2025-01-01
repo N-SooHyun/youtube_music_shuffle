@@ -19,7 +19,7 @@ void txt_file_read() {
 
 	arr = (wchar_t*)malloc(sizeof(wchar_t) * max);
 
-	fopen_s(&pFile, "../URL_api_address_file/video_details.txt", "r");
+	fopen_s(&pFile, "../URL_api_address_file/video_details_fin.txt", "r");
 
 	int i;
 	int j;
@@ -54,7 +54,7 @@ int txt_file_json_maker() {
 
 	arr = (wchar_t*)malloc(sizeof(wchar_t) * max);
 
-	fopen_s(&pFile, "../URL_api_address_file/video_details.txt", "r");
+	fopen_s(&pFile, "../URL_api_address_file/video_details_fin.txt", "r");
 
 	int i, j;
 	int end_num;
@@ -66,6 +66,7 @@ int txt_file_json_maker() {
 			arr = (wchar_t*)realloc(arr, sizeof(wchar_t) * max);
 		}
 		if ((c = fgetwc(pFile)) == end) break;
+		if (c == '\"' || c == '¡±') continue;
 		arr[i] = c;
 	}
 	arr[i] = '\0';
@@ -82,6 +83,7 @@ int txt_file_json_maker() {
 	wchar_t* URL_add = (wchar_t*)malloc(sizeof(wchar_t) * 1024);
 	wchar_t* Title = (wchar_t*)malloc(sizeof(wchar_t) * 1024);
 	wchar_t* Thumbnail = (wchar_t*)malloc(sizeof(wchar_t) * 1024);
+	wchar_t* Duration = (wchar_t*)malloc(sizeof(wchar_t) * 1024);
 
 	i = 0;
 	int json_arr_num = 0;
@@ -138,6 +140,25 @@ int txt_file_json_maker() {
 				key[9] = '\0';
 				json_arr_num = json_maker(key, Thumbnail);
 			}
+
+			//Duration
+			if (arr[i] == 'D' && arr[i + 1] == 'u' && arr[i + 2] == 'r' && arr[i + 3] == 'a' && arr[i + 4] == 't') {
+				i += 10;
+				for (j = 0; arr[i] != '\n'; j++, i++)
+					Duration[j] = arr[i];
+				Duration[j] = '\0';
+
+				key[0] = 'D';
+				key[1] = 'u';
+				key[2] = 'r';
+				key[3] = 'a';
+				key[4] = 't';
+				key[5] = 'i';
+				key[6] = 'o';
+				key[7] = 'n';
+				key[8] = '\0';
+				json_arr_num = json_maker(key, Duration);
+			}
 			i++;
 		}
 		i++;
@@ -150,6 +171,7 @@ int txt_file_json_maker() {
 	free(URL_add);
 	free(Title);
 	free(Thumbnail);
+	free(Duration);
 	return json_arr_num;
 }
 
@@ -160,8 +182,6 @@ int json_maker(wchar_t *key, wchar_t *value) {
 
 	int j;
 	static int i = 1;
-	
-	
 
 	for (j = 0; ; j++,i++) {
 		if (key[j] == 'U') { //URL
@@ -173,20 +193,20 @@ int json_maker(wchar_t *key, wchar_t *value) {
 				json[i++] = ',';
 
 			json[i++] = '{';
-			json[i++] = '\'';
+			json[i++] = '\"';
 			
 			for (j = 0; key[j] != '\0'; j++, i++) {
 				json[i] = key[j];
 			}
 
-			json[i++] = '\'';
+			json[i++] = '\"';
 			json[i++] = ':';
 
-			json[i++] = '\'';
+			json[i++] = '\"';
 			for (j = 0; value[j] != '\0'; j++, i++) {
 				json[i] = value[j];
 			}
-			json[i++] = '\'';
+			json[i++] = '\"';
 			json[i++] = ',';
 			break;
 		}
@@ -195,20 +215,20 @@ int json_maker(wchar_t *key, wchar_t *value) {
 				max *= 2;
 				json = (wchar_t*)realloc(json, sizeof(wchar_t*) * max);
 			}
-			json[i++] = '\'';
+			json[i++] = '\"';
 
 			for (j = 0; key[j] != '\0'; j++, i++) {
 				json[i] = key[j];
 			}
 
-			json[i++] = '\'';
+			json[i++] = '\"';
 			json[i++] = ':';
 
-			json[i++] = '\'';
+			json[i++] = '\"';
 			for (j = 0; value[j] != '\0'; j++, i++) {
 				json[i] = value[j];
 			}
-			json[i++] = '\'';
+			json[i++] = '\"';
 			json[i++] = ',';
 			break;
 		}
@@ -217,20 +237,40 @@ int json_maker(wchar_t *key, wchar_t *value) {
 				max *= 2;
 				json = (wchar_t*)realloc(json, sizeof(wchar_t*) * max);
 			}
-			json[i++] = '\'';
+			json[i++] = '\"';
 
 			for (j = 0; key[j] != '\0'; j++, i++) {
 				json[i] = key[j];
 			}
 
-			json[i++] = '\'';
+			json[i++] = '\"';
 			json[i++] = ':';
 
-			json[i++] = '\'';
+			json[i++] = '\"';
 			for (j = 0; value[j] != '\0'; j++, i++) {
 				json[i] = value[j];
 			}
-			json[i++] = '\'';
+			json[i++] = '\"';
+			json[i++] = ',';
+			break;
+		}
+		else if (key[j] == 'D' && key[j + 1] == 'u' && key[j + 2] == 'r') { //Duration
+			if (i >= max || i + 50 >= max) {
+				max *= 2;
+				json = (wchar_t*)realloc(json, sizeof(wchar_t*) * max);
+			}
+			json[i++] = '\"';
+
+			for (j = 0; key[j] != '\0'; j++, i++) {
+				json[i] = key[j];
+			}
+
+			json[i++] = '\"';
+			json[i++] = ':';
+
+			for (j = 0; value[j] != '\0'; j++, i++) {
+				json[i] = value[j];
+			}
 			json[i++] = '}';
 			break;
 		}
