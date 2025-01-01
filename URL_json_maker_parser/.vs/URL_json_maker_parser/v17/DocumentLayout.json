@@ -21,7 +21,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 2761,
+          "DockedWidth": 3059,
           "SelectedChildIndex": 6,
           "Children": [
             {
@@ -54,8 +54,7 @@
               "RelativeToolTip": "json_parse.h",
               "ViewState": "AQIAAAMAAAAAAAAAAAAAABUAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-12-31T09:43:45.652Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-31T09:43:45.652Z"
             },
             {
               "$type": "Document",
@@ -65,7 +64,7 @@
               "RelativeDocumentMoniker": "json_parser.c",
               "ToolTip": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parser.c",
               "RelativeToolTip": "json_parser.c",
-              "ViewState": "AQIAAIAAAAAAAAAAAAAswJMAAAATAAAA",
+              "ViewState": "AQIAAN4AAAAAAAAAAAAAAAMBAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-12-27T13:15:10.936Z",
               "EditorCaption": ""
@@ -73,7 +72,7 @@
           ]
         },
         {
-          "DockedWidth": 1612,
+          "DockedWidth": 1314,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -84,7 +83,7 @@
               "RelativeDocumentMoniker": "main.c",
               "ToolTip": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\main.c",
               "RelativeToolTip": "main.c",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-12-27T13:14:52.894Z",
               "EditorCaption": ""

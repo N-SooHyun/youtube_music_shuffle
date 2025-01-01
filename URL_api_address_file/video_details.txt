@@ -864,7 +864,7 @@ Thumbnail: https://i.ytimg.com/vi/Y7rMb15xhcg/hqdefault.jpg
 
 --------------------
 URL: https://www.youtube.com/watch?v=Go4f682wIAI
-Title: Otokaze - Mallow Flower [HD]
+Title: Otokaze - Mallow Flower HD
 Thumbnail: https://i.ytimg.com/vi/Go4f682wIAI/hqdefault.jpg
 
 --------------------

@@ -5,7 +5,7 @@
 #include<locale.h>
 #include "json_parse.h"
 
-wchar_t* json_maker(wchar_t* key, wchar_t* value);
+int json_maker(wchar_t* key, wchar_t* value);
 
 
 void txt_file_read() {
@@ -46,7 +46,7 @@ void txt_file_read() {
 
 }
 
-void txt_file_json_maker() {
+int txt_file_json_maker() {
 	FILE* pFile = NULL;
 	wchar_t* arr;
 	wchar_t end = '@';
@@ -70,6 +70,7 @@ void txt_file_json_maker() {
 	}
 	arr[i] = '\0';
 	end_num = i;
+	fclose(pFile);
 	
 	//arr 안에는 json으로 바꿔야할 문자열들이 기록되어있음
 	//URL, Title, Thumbnail
@@ -83,6 +84,7 @@ void txt_file_json_maker() {
 	wchar_t* Thumbnail = (wchar_t*)malloc(sizeof(wchar_t) * 1024);
 
 	i = 0;
+	int json_arr_num = 0;
 	while (i < end_num) {
 		while (arr[i] != '\n') { 
 			//URL 
@@ -98,7 +100,7 @@ void txt_file_json_maker() {
 				key[2] = 'L';
 				key[3] = '\0';
 
-				json_maker(key, URL_add);
+				json_arr_num = json_maker(key, URL_add);
 			}
 
 			//Title
@@ -107,6 +109,14 @@ void txt_file_json_maker() {
 				for (j = 0; arr[i] != '\n'; j++, i++)
 					Title[j] = arr[i];
 				Title[j] = '\0';
+
+				key[0] = 'T';
+				key[1] = 'i';
+				key[2] = 't';
+				key[3] = 'l';
+				key[4] = 'e';
+				key[5] = '\0';
+				json_arr_num = json_maker(key, Title);
 			}
 
 			//Thumbnail
@@ -115,22 +125,54 @@ void txt_file_json_maker() {
 				for (j = 0; arr[i] != '\n'; j++, i++)
 					Thumbnail[j] = arr[i];
 				Thumbnail[j] = '\0';
+
+				key[0] = 'T';
+				key[1] = 'h';
+				key[2] = 'u';
+				key[3] = 'm';
+				key[4] = 'b';
+				key[5] = 'n';
+				key[6] = 'a';
+				key[7] = 'i';
+				key[8] = 'l';
+				key[9] = '\0';
+				json_arr_num = json_maker(key, Thumbnail);
 			}
+			i++;
 		}
 		i++;
 	}
+	free(arr);
+	//key
+	free(key);
+
+	//value
+	free(URL_add);
+	free(Title);
+	free(Thumbnail);
+	return json_arr_num;
 }
 
 wchar_t* json = NULL;
 
-wchar_t* json_maker(wchar_t *key, wchar_t *value) {
-	int max = 1024;
+int json_maker(wchar_t *key, wchar_t *value) {
+	static int max = 1024;
 
 	int j;
-	static int i = 2;
+	static int i = 1;
 	
+	
+
 	for (j = 0; ; j++,i++) {
 		if (key[j] == 'U') { //URL
+			if (i >= max || i+50 >= max) {
+				max *= 2;
+				json = (wchar_t*)realloc(json, sizeof(wchar_t*) * max);
+			}
+			if (i != 1)
+				json[i++] = ',';
+
+			json[i++] = '{';
 			json[i++] = '\'';
 			
 			for (j = 0; key[j] != '\0'; j++, i++) {
@@ -146,25 +188,80 @@ wchar_t* json_maker(wchar_t *key, wchar_t *value) {
 			}
 			json[i++] = '\'';
 			json[i++] = ',';
+			break;
 		}
 		else if (key[j] == 'T' && key[j + 1] == 'i') { //Title
+			if (i >= max || i + 50 >= max) {
+				max *= 2;
+				json = (wchar_t*)realloc(json, sizeof(wchar_t*) * max);
+			}
+			json[i++] = '\'';
 
+			for (j = 0; key[j] != '\0'; j++, i++) {
+				json[i] = key[j];
+			}
+
+			json[i++] = '\'';
+			json[i++] = ':';
+
+			json[i++] = '\'';
+			for (j = 0; value[j] != '\0'; j++, i++) {
+				json[i] = value[j];
+			}
+			json[i++] = '\'';
+			json[i++] = ',';
+			break;
 		}
 		else if (key[j] == 'T' && key[j + 1] == 'h') { //Thumbnail
+			if (i >= max || i + 50 >= max) {
+				max *= 2;
+				json = (wchar_t*)realloc(json, sizeof(wchar_t*) * max);
+			}
+			json[i++] = '\'';
 
+			for (j = 0; key[j] != '\0'; j++, i++) {
+				json[i] = key[j];
+			}
+
+			json[i++] = '\'';
+			json[i++] = ':';
+
+			json[i++] = '\'';
+			for (j = 0; value[j] != '\0'; j++, i++) {
+				json[i] = value[j];
+			}
+			json[i++] = '\'';
+			json[i++] = '}';
+			break;
 		}
 	}
+	return i;
+}
+
+void json_file_maker() {
+	FILE* wwFile = NULL;
+	fopen_s(&wwFile,"../URL_api_address_file/youtube_music.json", "w");
+	int i=0;
+	while (json[i] != '\0') {
+		fputwc(json[i], wwFile);
+		i++;
+	}
+
+	
 
 }
 
 void json_parse_main() {
 	json = (wchar_t*)malloc(sizeof(wchar_t) * 1024);
 	json[0] = '[';
-	json[1] = '{';
 
 
-	txt_file_json_maker();
-
+	int end_num = txt_file_json_maker();
+	
+	json[end_num++] = ']';
+	json[end_num] = '\0';
+	json_file_maker();
+	
 	
 
 	
