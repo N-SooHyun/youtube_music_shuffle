@@ -1,3 +1,2 @@
 ﻿  json_parser.c
-C:\Users\NSH\Documents\youtube_music_shuffle\my-app\URL_json_maker_parser\json_parser.c(76,16): warning C4101: 'root' :참조되지 않은 지역 변수입니다.
   URL_json_maker_parser.vcxproj -> C:\Users\NSH\Documents\youtube_music_shuffle\my-app\URL_json_maker_parser\x64\Debug\URL_json_maker_parser.exe
