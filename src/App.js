@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import React, { useState, useEffect } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import youtubeMusicData from "./youtube_music.json"; 
 import './App.css';
 
@@ -9,24 +8,25 @@ function App() {
   const [currentVideo, setCurrentVideo] = useState(playlist[0]);
   const [currentTime, setCurrentTime] = useState(0);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
-  const [isVideoPaused, setIsVideoPaused] = useState(false);
 
 
   const handleVideoClick = (video)=>{
     setCurrentVideo(video);
     setCurrentTime(0);
     setIsVideoEnded(false);
-    setIsVideoPaused(false);
   }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if(!isVideoPaused){
-        if(currentTime >= currentVideo.Duration){
-          setIsVideoEnded(true);
-        }
-        setCurrentTime((prevTime) => prevTime + 5);
+      if(currentTime >= currentVideo.Duration){
+        console.log("true");
+        setIsVideoEnded(true);
       }
+      console.log('currentTime:', currentTime);
+      setCurrentTime((prevTime) => {
+        console.log('Updating from:',prevTime);
+        return prevTime + 5
+      });
     }, 5000);
 
     if(isVideoEnded) {
@@ -39,7 +39,7 @@ function App() {
     return () => {
       clearInterval(interval);
     };
-  }, [currentTime, currentVideo, isVideoEnded, isVideoPaused]);
+  }, [currentTime, currentVideo, isVideoEnded]);
 
   return (
     <div style={{ display: "flex" }}>
@@ -60,12 +60,22 @@ function App() {
         {/* 오른쪽: 리스트 */}
       <div style={{ flex: 1, padding: "10px" }}>
         <h3>Playlist</h3>
-        <ul>
+        <div>
           {youtubeMusicData.map((video, index) => (
-            <li
+            <button
               key={index}
               onClick={() => handleVideoClick(video)}
-              style={{ cursor: "pointer", marginBottom: "10px" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                backgroundColor: currentVideo === video ? "#d3d3d3" : "#fff",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
             >
               <img
                 src={video.Thumbnail}
@@ -75,9 +85,9 @@ function App() {
                 style={{ marginRight: "10px", borderRadius: "4px" }}
               />
               <span>{video.Title}</span>
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
