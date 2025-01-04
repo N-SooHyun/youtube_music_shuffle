@@ -1,15 +1,43 @@
+let TimerInterval;
 let currentTime = 0;
-let interval;
+let interruptVideo = false;
 
-onmessage = (e) => {
-    if(e.data === "start"){
-        interval = setInterval(() => {
-            currentTime += 5;
-            postMessage(currentTime);   //메인 스레드로 타이머 값을 전달
-        }, 5000);
-    }else if(e.data === "stop"){
-        clearInterval(interval);        //타이머 중지
-    }else if(e.data === "reset"){  
-        currentTime = 0;                //시간 초기화
-    }
+function startTimer(duration){
+    currentTime = 0;
+    TimerInterval = setInterval(() => {
+        currentTime += 5;
+        if(currentTime>=duration){
+            postMessage({type: 'timerEnd', currentTime});
+            clearInterval(TimerInterval);
+        }else if(interruptVideo){
+            postMessage({type: 'interruptVideo', currentTime});
+            clearInterval(TimerInterval);
+            interruptVideo = false;
+        }
+        else{
+            //postMessage({type: 'updateTime', currentTime});
+            console.log("currentTime: ",currentTime);
+        }
+    },5000);
 }
+
+function stopTimer() {
+    clearInterval(TimerInterval);
+}
+
+function cancelTimer(){
+    console.log("cancel");
+    interruptVideo = true;
+}
+
+
+onmessage = function(e){
+    const {type, duration} = e.data;
+    if (type === 'start') {
+        startTimer(duration);
+    } else if (type === 'stop') {
+        stopTimer();
+    } else if(type === 'cancel'){
+        cancelTimer();
+    }
+};

@@ -1,45 +1,75 @@
 import logo from './logo.svg';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import youtubeMusicData from "./youtube_music.json"; 
 import './App.css';
+
+const createWorker = () => new Worker(new URL('./worker.js', import.meta.url));
 
 function App() {
   const [playlist, setPlaylist] = useState(youtubeMusicData);
   const [currentVideo, setCurrentVideo] = useState(playlist[0]);
   const [currentTime, setCurrentTime] = useState(0);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
+  const [worker, setWorker] = useState(null);
+  const timerRef = useRef(null);
+  const workerRef = useRef(null);
+  const isFirstRender = useRef(true);
 
 
   const handleVideoClick = (video)=>{
+    const workerInstance = worker;
+    const i = 0; 
+    workerInstance.postMessage({type: 'cancel', i}); //전에 있던 비동기 작업 종료 요청
+    workerInstance.onmessage = (event) => {
+      const {type, currentTime} = event.data;
+
+      console.log("1번 비동기 작업 종료 완료",type, currentTime);
+    };
     setCurrentVideo(video);
     setCurrentTime(0);
     setIsVideoEnded(false);
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if(currentTime >= currentVideo.Duration){
-        console.log("true");
-        setIsVideoEnded(true);
-      }
-      console.log('currentTime:', currentTime);
-      setCurrentTime((prevTime) => {
-        console.log('Updating from:',prevTime);
-        return prevTime + 5
-      });
-    }, 5000);
+    if(isFirstRender.current){
+      return;
+    }
 
-    if(isVideoEnded) {
-      const nextIndex = (youtubeMusicData.indexOf(currentVideo) + 1) % youtubeMusicData.length;
-      setCurrentVideo(youtubeMusicData[nextIndex]);
+    const workerInstance = createWorker();
+    setWorker(workerInstance);
+
+    console.log("currentVideo 감지");
+
+    const duration = currentVideo.Duration;
+    //const duration = 500;
+
+    workerInstance.postMessage({type: 'start', duration}); //타이머 시작 메시지 보냄
+
+    workerInstance.onmessage = (event) => {
+      const {type, currentTime} = event.data;
+      
+      if(type === 'timerEnd'){
+        setIsVideoEnded(true);
+        setCurrentTime(currentTime);
+      }
+    };
+
+  },[currentVideo]);
+
+  useEffect(() => {
+    if(isFirstRender.current){
+      isFirstRender.current = false;
+      return;
+    }
+
+    if(isVideoEnded){
+      console.log("VideoEnded -> next Video");
+      const nextIndex = (playlist.indexOf(currentVideo) + 1) % playlist.length;
+      setCurrentVideo(playlist[nextIndex]);
       setCurrentTime(0);
       setIsVideoEnded(false);
     }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [currentTime, currentVideo, isVideoEnded]);
+  },[isVideoEnded]);
 
   return (
     <div style={{ display: "flex" }}>
