@@ -1,141 +1,120 @@
 import React, { useState, useEffect, useRef } from "react";
 import youtubeMusicData from "../youtube_music.json";
 
-const createWorker = () => new Worker(new URL('../worker.js', import.meta.url));
-
 function ApiIframe() {
   const [playlist, setPlaylist] = useState(youtubeMusicData);
-  const [currentVideo, setCurrentVideo] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isVideoEnded, setIsVideoEnded] = useState(false);
-  const [worker, setWorker] = useState(null);
-
-  const isFirstRender = useRef(true);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentVideo, setCurrentVideo] = useState(playlist[currentVideoIndex]);
   const playerRef = useRef(null);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const [LoadComplete, setLoadComplete] = useState(false);
-
-  const loadYouTubeAPI = () => {
-    return new Promise((resolve, reject) => {
-        //이미 api가 로드 되어있으면 바로 reslove
-        if(window.YT){
-            resolve(window.YT);
-        }else{
-            //스크립트 동적으로 로드
-            const script = document.createElement("script");
-            script.src = "https://www.youtube.com/iframe_api";
-            script.async = true;
-            script.onload = () => resolve(window.YT);
-            script.onerror = (err) => reject(err);
-            document.body.appendChild(script);
-        }
-    });
-  };
 
   useEffect(() => {
-    if(isFirstRender.current){
-        return;
-    }
-    console.log("init useEffect");
-
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     
-    
-    loadYouTubeAPI()
-    
-    setCurrentVideo(playlist[0]);
+    window.onYouTubeIframeAPIReady = () => {
+      playerRef.current = new window.YT.Player("player", {
+        height: "390",
+        width: "640",
+        videoId: playlist[currentVideoIndex].URL.split("v=")[1],
+        playersVars: {
+          autoplay: 1,
+        },
+        events:{
+          onStateChange: onPlayerStateChange,
+          onReady: onPlayerReady,
+          onError: onPlayerError,
+        },
+      });
+    };
 
     return () => {
-        console.log("구문끝?");
-        setCurrentVideo(playlist[0]);
+      console.log("playerRef.current", playerRef.current);
+      if(playerRef.current){
+        playerRef.current.destroy();
+      }
     };
   }, []);
 
   useEffect(() => {
-    if(isFirstRender.current){
-      return;
+      // Load the new video when currentVideoIndex changes
+    if (playerRef.current) {
+      playerRef.current.loadVideoById(playlist[currentVideoIndex].URL.split("v=")[1]);
+      setCurrentVideo(playlist[currentVideoIndex]);
     }
-    if(currentVideo == null){
-        return;
+  }, [currentVideoIndex]);
+
+  const onPlayerStateChange = (event) => {
+    if (event.data === window.YT.PlayerState.ENDED) {
+      // Move to the next video when the current video ends
+      setCurrentVideoIndex((prevIndex) =>
+        prevIndex + 1 < playlist.length ? prevIndex + 1 : 0 // Loop back to the first video
+      );
     }
-    
-    console.log("currentVideo 감지");
+  };
 
-    const initializePlayer = async () => {
-        try {
-          // YouTube API 로드를 기다린 후 player 초기화
-          await loadYouTubeAPI(); // YouTube API가 로드될 때까지 기다림
-          console.log("YouTube API 로드 완료");
-  
-          // YouTube API 로드 후, onYouTubeIframeAPIReady 호출
-          window.onYouTubeIframeAPIReady = () => {
-            playerRef.current = new window.YT.Player("player", {
-              height: "390",
-              width: "640",
-              videoId: currentVideo.URL.split("v=")[1],
-            });
-            setIsPlayerReady(true); // 플레이어가 준비되면 상태 변경
-            console.log("비동기작업?");
-          };
-        } catch (error) {
-          console.error("YouTube API 로드 실패:", error);
-        }
-    };
-    
-
-    console.log("current Video:", currentVideo);
-    initializePlayer();
-
-    return() => {
-        console.log("끝나냐?");
-        setIsPlayerReady(false);
-    }    
-  },[currentVideo]);
-
-  const handleVideoClick = (video)=>{
-    setCurrentVideo(video);
-    setCurrentTime(0);
-    setIsVideoEnded(false);
+  const onPlayerReady = (event) => {
+    event.target.playVideo();
   }
 
-  useEffect(() => {
-    if(isFirstRender.current){
-      isFirstRender.current = false;
-      return;
+  const onPlayerError = (event) => {
+    setCurrentVideoIndex((prevIndex) =>
+      prevIndex + 1 < playlist.length ? prevIndex + 1 : 0 // Loop back to the first video
+    );
+  }
+  
+  const handleVideoClick = (video, index)=>{
+    setCurrentVideoIndex(index);
+  }
+
+  const handleVideoShuffle = () => {
+    let videoList = playlist;
+    if(currentVideoIndex == 0){
+      videoList = playlist.slice(1);
     }
 
-    if(isVideoEnded){
-      console.log("VideoEnded -> next Video");
-      const nextIndex = (playlist.indexOf(currentVideo) + 1) % playlist.length;
-      setCurrentVideo(playlist[nextIndex]);
-      setCurrentTime(0);
-      setIsVideoEnded(false);
+    for(let i = videoList.length - 1; i>0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [videoList[i], videoList[j]] = [videoList[j], videoList[i]];
     }
-  },[isVideoEnded]);
+
+    if(currentVideoIndex == 0){
+      videoList.unshift(playlist[0]);
+    }
+    console.log("videoList: ",videoList);
+    setPlaylist(videoList);
+    console.log("playList: ",playlist);
+    setCurrentVideo(playlist[setCurrentVideoIndex]);
+    setCurrentVideoIndex(0);
+  }
   
 
   return (
     <div style={{ display: "flex" }}>
       {/* 왼쪽: 비디오 플레이어 */}
       <div id="player" style={{ flex: 3 }}>      
-        
       </div>
       
 
         {/* 오른쪽: 리스트 */}
       <div style={{ flex: 1, padding: "10px" }}>
-        <h3>Playlist</h3>
+        <div><h3>Playlist</h3>
+        <button onClick={() => handleVideoShuffle()}>셔플</button>
+        </div>
+        
         <div>
-          {youtubeMusicData.map((video, index) => (
+          {playlist.map((video, index) => (
             <button
               key={index}
-              onClick={() => handleVideoClick(video)}
+              onClick={() => handleVideoClick(video, index)}
               style={{
                 display: "flex",
                 alignItems: "center",
                 width: "100%",
                 padding: "10px",
                 marginBottom: "10px",
-                backgroundColor: currentVideo === video ? "#d3d3d3" : "#fff",
+                backgroundColor: currentVideoIndex === index ? "#d3d3d3" : "#fff",
                 border: "1px solid #ccc",
                 borderRadius: "4px",
                 cursor: "pointer",
