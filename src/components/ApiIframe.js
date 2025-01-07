@@ -15,7 +15,7 @@ function ApiIframe() {
     
     window.onYouTubeIframeAPIReady = () => {
       playerRef.current = new window.YT.Player("player", {
-        height: "390",
+        height: "700",
         width: "640",
         videoId: playlist[currentVideoIndex].URL.split("v=")[1],
         playersVars: {

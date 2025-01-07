@@ -60,13 +60,16 @@ def process_urls_from_file(filename):
 
 def save_video_details_to_txt(video_details, filename="video_details_fin.txt"):
     """제목, 썸네일, 재생 시간을 텍스트 파일로 저장하는 함수"""
+    id = 0
     with open(filename, 'w', encoding='utf-8') as f:
         for detail in video_details:
+            f.write(f"ID: {id}\n")
             f.write(f"URL: {detail['url']}\n")
             f.write(f"Title: {detail['title']}\n")
             f.write(f"Thumbnail: {detail['thumbnail']}\n")
             f.write(f"Duration: {detail['duration']}\n")  # 재생 시간도 저장
             f.write("\n--------------------\n")
+            id=id+1
 
 # 메모장에서 URL을 읽어들여 각 비디오에 대한 정보를 가져옴
 video_details = process_urls_from_file("youtube_playlist_urls.txt") 
