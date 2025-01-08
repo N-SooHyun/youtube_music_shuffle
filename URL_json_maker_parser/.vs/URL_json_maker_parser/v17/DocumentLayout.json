@@ -1,0 +1,96 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{42685F3D-40D7-4E8C-B134-430581247B23}|URL_json_maker_parser.vcxproj|C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parser.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{42685F3D-40D7-4E8C-B134-430581247B23}|URL_json_maker_parser.vcxproj|solutionrelative:json_parser.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{42685F3D-40D7-4E8C-B134-430581247B23}|URL_json_maker_parser.vcxproj|C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{42685F3D-40D7-4E8C-B134-430581247B23}|URL_json_maker_parser.vcxproj|solutionrelative:main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{42685F3D-40D7-4E8C-B134-430581247B23}|URL_json_maker_parser.vcxproj|C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parse.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{42685F3D-40D7-4E8C-B134-430581247B23}|URL_json_maker_parser.vcxproj|solutionrelative:json_parse.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 3059,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{c9c0ae26-aa77-11d2-b3f0-0000f87570ee}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{de1fc918-f32e-4dd7-a915-1792a051f26b}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "json_parse.h",
+              "DocumentMoniker": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parse.h",
+              "RelativeDocumentMoniker": "json_parse.h",
+              "ToolTip": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parse.h",
+              "RelativeToolTip": "json_parse.h",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABUAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-12-31T09:43:45.652Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "json_parser.c",
+              "DocumentMoniker": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parser.c",
+              "RelativeDocumentMoniker": "json_parser.c",
+              "ToolTip": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\json_parser.c",
+              "RelativeToolTip": "json_parser.c",
+              "ViewState": "AQIAACcAAAAAAAAAAAAowEEAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-12-27T13:15:10.936Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 1314,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "main.c",
+              "DocumentMoniker": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\main.c",
+              "RelativeDocumentMoniker": "main.c",
+              "ToolTip": "C:\\Users\\NSH\\Documents\\youtube_music_shuffle\\my-app\\URL_json_maker_parser\\main.c",
+              "RelativeToolTip": "main.c",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-12-27T13:14:52.894Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

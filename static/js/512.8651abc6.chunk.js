@@ -1,0 +1,2 @@
+(()=>{let e,t=0,n=!1;onmessage=function(r){const{type:a,duration:c}=r.data;"start"===a?function(r){t=0,e=setInterval((()=>{t+=5,t>=r?(postMessage({type:"timerEnd",currentTime:t}),clearInterval(e)):n?(postMessage({type:"interruptVideo",currentTime:t}),clearInterval(e),n=!1):console.log("currentTime: ",t)}),5e3)}(c):"stop"===a?clearInterval(e):"cancel"===a&&(console.log("cancel"),n=!0)}})();
+//# sourceMappingURL=512.8651abc6.chunk.js.map
