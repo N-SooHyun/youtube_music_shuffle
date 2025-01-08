@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import youtubeMusicData from "../youtube_music.json";
+//import youtubeMusicData from "../youtube_music.json";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-function DragNDrop(file, onFileChange) {
-  const [playlist, setPlaylist] = useState(youtubeMusicData);
+function DragNDrop(jsonData) {
+  const [playlist, setPlaylist] = useState(jsonData.jsonData);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [currentVideo, setCurrentVideo] = useState(playlist[currentVideoIndex]);
   const playerRef = useRef(null);
@@ -113,7 +113,7 @@ function DragNDrop(file, onFileChange) {
   };
   
   return (
-    <div style={{ display: "flex", height: "90vh"}}>
+    <div style={{ display: "flex", height: "50vh"}}>
       {/* 왼쪽: 비디오 플레이어 */}
       <div id="player" style={{ flex: 3, height: "100%" }}>
       </div>

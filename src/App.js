@@ -8,27 +8,31 @@ import DragNDrop from './components/DragNDrop';
 import TestSample from './components/TestSample';
 import './App.css';
 
-function App() {
-  const playlist = [
-    "https://www.youtube.com/watch?v=-BIs3pv8kCY",
-    "https://www.youtube.com/watch?v=935RgNLNuno",
-    "https://www.youtube.com/watch?v=FgwIcJDnQOk",
-  ];
-  
+function App() {  
   const [file, setFile] = useState(null);
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [jsonData, setJsonData] = useState(null);
+
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    const uploadedFile = event.target.files[0];
+    setFile(uploadedFile);
   };
 
-  // 파일 처리 버튼 클릭 핸들러
   const handleProcess = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const jsonData = JSON.parse(e.target.result);
-        console.log(jsonData);
-        // 여기서 JSON 데이터 처리 로직을 추가하면 됩니다.
-        alert('파일이 정상적으로 업로드되었습니다!');
+        const parsedData = JSON.parse(e.target.result);
+
+        const isValid = validateJsonFormat(parsedData);
+
+        if(isValid){
+          setJsonData(parsedData);
+          alert('파일이 정상적으로 업로드되었습니다!');
+          setIsFileUploaded(true);
+        }else{
+          alert('잘못된 형식의 JSON파일입니다.');
+        }
       };
       reader.readAsText(file);
     } else {
@@ -36,8 +40,54 @@ function App() {
     }
   };
 
+  const validateJsonFormat = (data) => {
+    if(!Array.isArray(data)){
+      return false; //배열이 아님
+    }
+
+    for(const item of data){
+      //필수 키
+      if(!item.ID || !item.URL || !item.Title || !item.Thumbnail){
+        console.log("필수키가 없습니다.");
+        return false;
+      }
+
+      if (typeof item.ID !== 'string' || isNaN(item.ID)) {
+        console.log("ID가 없습니다.");
+        return false; 
+      }
+  
+      if (typeof item.URL !== 'string' || !isValidUrl(item.URL)) {
+        console.log("URL이 없습니다.");
+        return false;  
+      }
+  
+      if (typeof item.Title !== 'string' || item.Title.trim() === '') {
+        console.log("제목이 없습니다.");
+        return false;  
+      }
+  
+      if (typeof item.Thumbnail !== 'string' || !isValidUrl(item.Thumbnail)) {
+        console.log("썸네일이 없습니다.");
+        return false;  
+      }
+    }
+    return true;
+  };
+
+  const isValidUrl = (url) => {
+    try{
+      new URL(url);
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
   return(
-    <div className="container">
+    <div>
+      {!isFileUploaded ? (<>
+      <div  className="container">
     <h1>유튜브 재생목록 셔플 정상화</h1>
     <p>
       이 프로그램을 사용하여 유튜브 재생목록의 셔플을 정상화할 수 있습니다. 아래에 JSON 파일을
@@ -82,6 +132,11 @@ function App() {
     <button className="process-btn" onClick={handleProcess}>
       파일 처리 시작
     </button>
+      </div>
+      
+      </>):(<DragNDrop jsonData={jsonData}/>
+    )}
+    
   </div>
   );
 }
