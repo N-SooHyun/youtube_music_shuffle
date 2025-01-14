@@ -109,7 +109,18 @@ function DragNDrop(jsonData) {
     const [reorderedItem] = items.splice(sourceIndex, 1);
     items.splice(destinationIndex, 0, reorderedItem);
 
+    // 새로 정렬된 배열에서 현재 재생 중인 비디오의 인덱스가 변했는지 확인
+    let newCurrentVideoIndex = currentVideoIndex;
+
+    // 새로운 배열에서 재생 중인 비디오 인덱스 확인
+    if (currentVideoIndex > destinationIndex && currentVideoIndex <= sourceIndex) {
+        newCurrentVideoIndex = currentVideoIndex + 1; 
+    } else if (currentVideoIndex < destinationIndex && currentVideoIndex >= sourceIndex) {
+        newCurrentVideoIndex = currentVideoIndex - 1; 
+    }
+
     setPlaylist(items);
+    setCurrentVideoIndex(newCurrentVideoIndex);
   };
   
   return (
