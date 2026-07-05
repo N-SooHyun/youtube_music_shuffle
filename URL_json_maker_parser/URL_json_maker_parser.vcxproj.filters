@@ -21,6 +21,9 @@
     <ClCompile Include="json_parser.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Rest_api.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json_parse.h">
